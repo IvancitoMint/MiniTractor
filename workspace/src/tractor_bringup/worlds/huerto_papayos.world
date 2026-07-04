@@ -1,0 +1,524 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="huerto_papayos">
+
+    <!-- Sol y plano base -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Cámara inicial -->
+    <gui fullscreen="0">
+      <camera name="user_camera">
+        <pose>6 -12 8 0 0.45 1.57</pose>
+      </camera>
+    </gui>
+
+    <!-- Física -->
+    <physics type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <!-- Terreno visible del huerto -->
+    <model name="campo_huerto">
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <pose>0 0 0.01 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>30 20 0.02</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.40 0.20 1</ambient>
+            <diffuse>0.55 0.40 0.20 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- =========================================================
+         HILERA IZQUIERDA (y = +1.5)
+         Separación entre plantas = 1.5 m
+         ========================================================= -->
+
+    <!-- x = 2.0 -->
+    <model name="papayo_l1">
+      <static>true</static>
+      <pose>2.0 1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- x = 3.5 -->
+    <model name="papayo_l2">
+      <static>true</static>
+      <pose>3.5 1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- x = 5.0 -->
+    <model name="papayo_l3">
+      <static>true</static>
+      <pose>5.0 1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- x = 6.5 -->
+    <model name="papayo_l4">
+      <static>true</static>
+      <pose>6.5 1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- x = 8.0 -->
+    <model name="papayo_l5">
+      <static>true</static>
+      <pose>8.0 1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- x = 9.5 -->
+    <model name="papayo_l6">
+      <static>true</static>
+      <pose>9.5 1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- x = 11.0 -->
+    <model name="papayo_l7">
+      <static>true</static>
+      <pose>11.0 1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- x = 12.5 -->
+    <model name="papayo_l8">
+      <static>true</static>
+      <pose>12.5 1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- =========================================================
+         HILERA DERECHA (y = -1.5)
+         ========================================================= -->
+
+    <model name="papayo_r1">
+      <static>true</static>
+      <pose>2.0 -1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="papayo_r2">
+      <static>true</static>
+      <pose>3.5 -1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="papayo_r3">
+      <static>true</static>
+      <pose>5.0 -1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="papayo_r4">
+      <static>true</static>
+      <pose>6.5 -1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="papayo_r5">
+      <static>true</static>
+      <pose>8.0 -1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="papayo_r6">
+      <static>true</static>
+      <pose>9.5 -1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="papayo_r7">
+      <static>true</static>
+      <pose>11.0 -1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="papayo_r8">
+      <static>true</static>
+      <pose>12.5 -1.5 0 0 0 0</pose>
+      <link name="tronco">
+        <visual name="tronco_visual">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.08</radius><length>1.2</length></cylinder></geometry>
+          <material><ambient>0.45 0.28 0.12 1</ambient><diffuse>0.45 0.28 0.12 1</diffuse></material>
+        </visual>
+        <collision name="tronco_collision">
+          <pose>0 0 0.6 0 0 0</pose>
+          <geometry><cylinder><radius>0.10</radius><length>1.2</length></cylinder></geometry>
+        </collision>
+      </link>
+      <link name="copa">
+        <visual name="copa_visual">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.35</radius></sphere></geometry>
+          <material><ambient>0.10 0.55 0.10 1</ambient><diffuse>0.10 0.55 0.10 1</diffuse></material>
+        </visual>
+        <collision name="copa_collision">
+          <pose>0 0 1.45 0 0 0</pose>
+          <geometry><sphere><radius>0.30</radius></sphere></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- =========================================================
+         Obstáculo para probar frenado automático
+         ========================================================= -->
+    <model name="caja_obstaculo">
+      <static>true</static>
+      <pose>7.0 0 0.35 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.8 0.8 0.7</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.75 0.15 0.15 1</ambient>
+            <diffuse>0.75 0.15 0.15 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.8 0.8 0.7</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+  </world>
+</sdf>
