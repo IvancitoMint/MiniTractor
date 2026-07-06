@@ -14,13 +14,22 @@ Esta organización facilita el mantenimiento del código y permite incorporar nu
 
 Actualmente MiniTractor está compuesto por tres paquetes principales:
 
-```
-                   MiniTractor
-                         │
-        ┌────────────────┼────────────────┐
-        │                │                │
-        ▼                ▼                ▼
-tractor_description  tractor_bringup  tractor_safety
+```mermaid
+flowchart TD
+    MT["MiniTractor"]
+    MT --> TB["tractor_bringup"]
+    MT --> TD["tractor_description"]
+    MT --> TS["tractor_safety"]
+
+    TB --> TB1["Launch files"]
+    TB --> TB2["SLAM / Nav2"]
+    TB --> TB3["Mundos y modelos dinamicos"]
+
+    TD --> TD1["URDF / Xacro"]
+    TD --> TD2["ros2_control"]
+    TD --> TD3["Sensores y geometria"]
+
+    TS --> TS1["Safety Stop Node"]
 ```
 
 Cada uno posee una única responsabilidad dentro del sistema.
@@ -98,33 +107,18 @@ forward_angle_deg: 45.0
 
 Actualmente el flujo de información puede representarse de la siguiente manera:
 
-```
-                 Teleop
-                    │
-             /cmd_vel_raw
-                    │
-                    ▼
-            Safety Stop Node
-                    │
-                /cmd_vel
-                    │
-                    ▼
-          diff_drive_controller
-                    │
-                    ▼
-        ros2_control / Gazebo
-                    │
-      ┌─────────────┴─────────────┐
-      │                           │
-      ▼                           ▼
-   /odom                      /joint_states
-      │                           │
-      └─────────────┬─────────────┘
-                    ▼
-           robot_state_publisher
-                    │
-                    ▼
-                   TF
+```mermaid
+flowchart TD
+    TELEOP["Teleop / Nav2"] --> RAW["/cmd_vel_raw"]
+    RAW --> SAFETY["Safety Stop Node"]
+    SAFETY --> CMD["/cmd_vel"]
+    CMD --> DIFF["diff_drive_controller"]
+    DIFF --> GZ["ros2_control / Gazebo"]
+    GZ --> ODOM["/odom"]
+    GZ --> JOINTS["/joint_states"]
+    ODOM --> RSP["robot_state_publisher"]
+    JOINTS --> RSP
+    RSP --> TF["/tf y /tf_static"]
 ```
 
 Toda la comunicación entre componentes se realiza mediante los mecanismos estándar de ROS 2:
@@ -150,18 +144,16 @@ La integración de SLAM Toolbox utiliza los datos ya publicados por la simulaci�
 
 El flujo de mapeo es:
 
-```text
-Gazebo / Tractor
-        │
-        ├── /scan
-        ├── /odom
-        └── TF
-             │
-             ▼
-      slam_toolbox
-             │
-             ▼
-           /map
+```mermaid
+flowchart LR
+    GZ["Gazebo / Tractor"] --> SCAN["/scan"]
+    GZ --> ODOM["/odom"]
+    GZ --> TF["/tf y /tf_static"]
+    SCAN --> SLAM["slam_toolbox"]
+    ODOM --> SLAM
+    TF --> SLAM
+    SLAM --> MAP["/map"]
+    SLAM --> MAPODOM["map -> odom"]
 ```
 
 `slam_toolbox` publica la transformación `map -> odom`, mientras que `diff_drive_controller` mantiene la odometría y el resto de la cadena TF del tractor.
@@ -188,38 +180,28 @@ Navigation2 utiliza el mapa guardado por SLAM Toolbox para localizar y navegar e
 
 El flujo de navegación es:
 
-```text
-RViz2 / Goal Pose
-        │
-        ▼
-BT Navigator
-        │
-        ▼
-Planner Server
-        │
-        ▼
-Controller Server
-        │
-        ▼
-   /cmd_vel_raw
-        │
-        ▼
- Safety Stop Node
-        │
-        ▼
-    /cmd_vel
-        │
-        ▼
- diff_drive_controller
+```mermaid
+flowchart TD
+    RVIZ["RViz2 / Goal Pose"] --> BTNAV["BT Navigator"]
+    BTNAV --> PLANNER["Planner Server"]
+    PLANNER --> CONTROLLER["Controller Server"]
+    CONTROLLER --> RAW["/cmd_vel_raw"]
+    RAW --> SAFETY["Safety Stop Node"]
+    SAFETY --> CMD["/cmd_vel"]
+    CMD --> DIFF["diff_drive_controller"]
+    DIFF --> ROBOT["Tractor en Gazebo"]
 ```
 
 El flujo de localización es:
 
-```text
-map_server  ──► /map
-AMCL        ──► map -> odom
-LiDAR       ──► /scan
-Odometría   ──► /odom
+```mermaid
+flowchart LR
+    MAPSERVER["map_server"] --> MAP["/map"]
+    SCAN["/scan"] --> AMCL["AMCL"]
+    ODOM["/odom"] --> AMCL
+    TF["/tf"] --> AMCL
+    MAP --> AMCL
+    AMCL --> MAPODOM["map -> odom"]
 ```
 
 Nav2 no publica directamente hacia `/cmd_vel`. Su salida se remapea a `/cmd_vel_raw` para conservar `tractor_safety` como filtro final antes del controlador.
@@ -342,20 +324,16 @@ Se utiliza para:
 
 Actualmente el sistema publica la siguiente jerarquía de transformaciones.
 
-```
-odom
- │
- ▼
-base_footprint
- │
- ▼
-base_link
- ├── lidar_link
- ├── camera_link
- ├── front_left_wheel
- ├── front_right_wheel
- ├── rear_left_wheel
- └── rear_right_wheel
+```mermaid
+flowchart TD
+    ODOM["odom"] --> BF["base_footprint"]
+    BF --> BL["base_link"]
+    BL --> LIDAR["lidar_link"]
+    BL --> CAMERA["camera_link"]
+    BL --> FL["front_left_wheel"]
+    BL --> FR["front_right_wheel"]
+    BL --> RL["rear_left_wheel"]
+    BL --> RR["rear_right_wheel"]
 ```
 
 Esta estructura sirve como base para SLAM, AMCL y Navigation2.

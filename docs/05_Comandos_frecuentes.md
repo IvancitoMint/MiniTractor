@@ -320,26 +320,14 @@ Teclas principales:
 
 Actualmente el flujo de comandos es:
 
-```text
-Usuario / teleoperación
-        │
-        ▼
-   /cmd_vel_raw
-        │
-        ▼
- SafetyStopNode
-        │
-        ▼
-    /cmd_vel
-        │
-        ▼
- diff_drive_controller
-        │
-        ▼
- ros2_control / Gazebo
-        │
-        ▼
-     Tractor
+```mermaid
+flowchart TD
+    USER["Usuario / teleoperacion"] --> RAW["/cmd_vel_raw"]
+    RAW --> SAFETY["SafetyStopNode"]
+    SAFETY --> CMD["/cmd_vel"]
+    CMD --> DIFF["diff_drive_controller"]
+    DIFF --> GZ["ros2_control / Gazebo"]
+    GZ --> ROBOT["Tractor"]
 ```
 
 No se recomienda publicar directamente sobre `/cmd_vel`, porque evita el filtro de seguridad.

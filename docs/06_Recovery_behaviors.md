@@ -14,29 +14,15 @@ MiniTractor usa Nav2 sobre un mapa estático generado previamente con SLAM Toolb
 
 El flujo principal es:
 
-```text
-RViz2 / Goal Pose
-        │
-        ▼
-BT Navigator
-        │
-        ▼
-Planner Server
-        │
-        ▼
-Controller Server
-        │
-        ▼
-   /cmd_vel_raw
-        │
-        ▼
- Safety Stop Node
-        │
-        ▼
-    /cmd_vel
-        │
-        ▼
- diff_drive_controller
+```mermaid
+flowchart TD
+    RVIZ["RViz2 / Goal Pose"] --> BTNAV["BT Navigator"]
+    BTNAV --> PLANNER["Planner Server"]
+    PLANNER --> CONTROLLER["Controller Server"]
+    CONTROLLER --> RAW["/cmd_vel_raw"]
+    RAW --> SAFETY["Safety Stop Node"]
+    SAFETY --> CMD["/cmd_vel"]
+    CMD --> DIFF["diff_drive_controller"]
 ```
 
 La decisión arquitectónica importante es que Nav2 no manda comandos directamente a `/cmd_vel`. Sus comandos pasan primero por `/cmd_vel_raw`, para que `tractor_safety` conserve la última palabra antes del controlador.
@@ -139,12 +125,14 @@ Si el obstáculo es permanente, esperar no resolverá el bloqueo. En ese caso Na
 
 Safety Stop y los recovery behaviors cumplen funciones distintas.
 
-```text
-Nav2 recovery behaviors:
-  intentan recuperar la navegación.
-
-Safety Stop:
-  impide que un comando peligroso llegue al controlador.
+```mermaid
+flowchart LR
+    NAV2["Nav2 recovery behaviors"] --> RECOVERY["Recuperan la navegacion"]
+    RECOVERY --> RAW["/cmd_vel_raw"]
+    RAW --> SAFETY["Safety Stop"]
+    SAFETY --> CMD["/cmd_vel"]
+    SAFETY --> BLOCK["Bloquea comandos frontales peligrosos"]
+    CMD --> CONTROLLER["diff_drive_controller"]
 ```
 
 Si Nav2 intenta avanzar y Safety Stop detecta un obstáculo en la zona frontal, el comando lineal se bloquea. Nav2 puede interpretar la falta de progreso como un bloqueo y activar recuperación.
@@ -160,17 +148,23 @@ Esto es deseable porque mantiene dos capas:
 
 Un caso esperado con la caja roja dinámica sería:
 
-```text
-1. Nav2 recibe un Goal Pose.
-2. Planner Server genera una ruta.
-3. Controller Server empieza a seguirla.
-4. La caja aparece en el pasillo.
-5. Local Costmap marca el obstáculo.
-6. Controller Server intenta evitarlo.
-7. Si no puede, Nav2 activa recovery behavior.
-8. El robot puede esperar, girar o retroceder.
-9. Nav2 limpia/recalcula y vuelve a intentar la ruta.
-10. Si el bloqueo persiste, la navegación puede fallar de forma controlada.
+```mermaid
+sequenceDiagram
+    participant RViz2
+    participant Nav2
+    participant Costmap as Local Costmap
+    participant Safety as Safety Stop
+    participant Robot as Tractor
+
+    RViz2->>Nav2: Envia Goal Pose
+    Nav2->>Nav2: Planner genera ruta
+    Nav2->>Robot: Controller envia /cmd_vel_raw
+    Costmap-->>Nav2: Obstaculo dinamico detectado
+    Safety-->>Nav2: Bloqueo de avance cercano
+    Nav2->>Nav2: Activa recovery behavior
+    Nav2->>Costmap: Limpia o actualiza costmaps
+    Nav2->>Robot: Reintenta trayectoria
+    Nav2-->>RViz2: Reporta fallo si el bloqueo persiste
 ```
 
 ---

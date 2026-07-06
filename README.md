@@ -60,6 +60,22 @@ En próximas etapas se trabajará en:
 
 ---
 
+# Flujo principal
+
+```mermaid
+flowchart LR
+    SIM["Gazebo + Tractor"] --> SENSORS["/scan, /odom, /tf"]
+    SENSORS --> SLAM["SLAM Toolbox"]
+    SLAM --> MAP["Mapa del huerto"]
+    MAP --> NAV2["Navigation2"]
+    NAV2 --> RAW["/cmd_vel_raw"]
+    RAW --> SAFETY["Safety Stop"]
+    SAFETY --> CMD["/cmd_vel"]
+    CMD --> CTRL["diff_drive_controller"]
+```
+
+---
+
 # Estructura del proyecto
 
 ```text

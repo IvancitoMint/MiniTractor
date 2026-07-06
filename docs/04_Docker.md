@@ -106,32 +106,22 @@ Entre otras tareas:
 
 El flujo habitual de desarrollo es el siguiente.
 
-```
-Repositorio
+```mermaid
+flowchart TD
+    REPO["Repositorio"]
+    BUILD["docker_build.sh"]
+    IMAGE["Imagen Docker"]
+    SHELL["docker_shell.sh"]
+    CONTAINER["Contenedor"]
+    WS["ws_build.sh"]
+    RUN["sim_run.sh / slam_run.sh / nav_run.sh"]
 
-↓
-
-docker_build.sh
-
-↓
-
-Imagen Docker
-
-↓
-
-docker_shell.sh
-
-↓
-
-Contenedor
-
-↓
-
-ws_build.sh
-
-↓
-
-sim_run.sh
+    REPO --> BUILD
+    BUILD --> IMAGE
+    IMAGE --> SHELL
+    SHELL --> CONTAINER
+    CONTAINER --> WS
+    WS --> RUN
 ```
 
 Todo el desarrollo se realiza dentro del contenedor.
