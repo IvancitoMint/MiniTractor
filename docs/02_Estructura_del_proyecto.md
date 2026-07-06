@@ -19,7 +19,6 @@ MiniTractor/
 ├── workspace/
 │
 ├── README.md
-├── LICENSE
 └── .gitignore
 ```
 
@@ -80,7 +79,8 @@ docs/
 ├── 02_Estructura_del_proyecto.md
 ├── 03_Arquitectura.md
 ├── 04_Docker.md
-└── 05_Comandos_frecuentes.md
+├── 05_Comandos_frecuentes.md
+└── 06_Recovery_behaviors.md
 ```
 
 Cada documento aborda un aspecto específico del proyecto para evitar información duplicada.
@@ -105,6 +105,8 @@ scripts/
 ├── slam_save_map.sh
 ├── obstacle_add.sh
 ├── obstacle_remove.sh
+├── nav_run.sh
+├── nav_rviz.sh
 │
 ├── ws_build.sh
 ├── ws_clean.sh
@@ -161,6 +163,17 @@ Permiten agregar o quitar obstáculos temporales durante la simulación.
 |---------|---------|
 | obstacle_add.sh | Inserta la caja roja de prueba en Gazebo. |
 | obstacle_remove.sh | Elimina la caja roja de prueba de Gazebo. |
+
+---
+
+## Scripts de Navegación
+
+Permiten ejecutar Navigation2 y abrir RViz2 con la configuración del proyecto.
+
+| Script | Función |
+|---------|---------|
+| nav_run.sh | Inicia la simulación con Navigation2 usando un mapa estático. |
+| nav_rviz.sh | Abre RViz2 con visualización de mapa, costmaps y objetivos. |
 
 ---
 
@@ -244,7 +257,27 @@ Se encarga de:
 - instalar modelos dinámicos de simulación
 - publicar el modelo del robot
 - generar la entidad en la simulación
+- cargar configuraciones de SLAM y Navigation2
 - iniciar los nodos necesarios para la simulación
+
+Contenido principal:
+
+```text
+tractor_bringup/
+├── config/
+│   ├── nav2_params.yaml
+│   └── slam_toolbox.yaml
+├── launch/
+│   ├── sim_with_safety.launch.py
+│   ├── sim_with_slam.launch.py
+│   └── sim_with_nav2.launch.py
+├── models/
+│   └── caja_obstaculo/
+├── rviz/
+│   └── nav2.rviz
+└── worlds/
+    └── huerto_papayos.world
+```
 
 ---
 
@@ -260,6 +293,8 @@ Contiene:
 - mundos de Gazebo
 - configuraciones de RViz
 - archivos launch relacionados con la descripción del robot
+
+El launch `display.launch.py` pertenece a este paquete porque sirve para visualizar o validar la descripción del tractor, no para iniciar el sistema completo.
 
 ---
 
@@ -316,12 +351,10 @@ Con el objetivo de mantener una estructura uniforme, el proyecto sigue las sigui
 
 # Evolución del proyecto
 
-La estructura del repositorio continuará creciendo conforme se incorporen nuevas funcionalidades.
-
-Las siguientes versiones añadirán nuevos componentes relacionados con:
+La estructura del repositorio ha evolucionado para integrar:
 
 - ros2_control
 - SLAM Toolbox
 - Navigation2
 
-La organización actual fue diseñada para integrar estas tecnologías sin necesidad de reorganizar el repositorio nuevamente.
+La organización actual mantiene estas tecnologías separadas por responsabilidad para evitar reorganizaciones grandes y facilitar el mantenimiento.

@@ -62,7 +62,10 @@ Entre sus responsabilidades se encuentran:
 - cargar el mundo virtual
 - publicar el robot
 - insertar el tractor en la simulación
-- iniciar los nodos necesarios
+- iniciar Safety Stop
+- iniciar SLAM Toolbox cuando se solicita mapeo
+- iniciar Navigation2 y RViz2 cuando se solicita navegación
+- instalar configuraciones, modelos dinámicos y mundos de simulación
 
 Puede considerarse como el punto de entrada principal del proyecto.
 
@@ -79,6 +82,15 @@ Cuando detecta un obstáculo dentro de la distancia configurada:
 - bloquea el movimiento hacia adelante;
 - permite continuar girando o retrocediendo;
 - protege al robot frente a obstáculos inesperados.
+
+La configuración actual del launch base usa:
+
+```text
+stop_distance: 0.8 m
+forward_angle_deg: 45.0
+```
+
+`forward_angle_deg` se aplica hacia ambos lados del frente del LiDAR, por lo que Safety Stop revisa aproximadamente 90 grados frontales en total.
 
 ---
 
@@ -170,6 +182,83 @@ Para generar mapas persistentes del huerto, el mundo base no incluye obstáculos
 
 ---
 
+# Navigation2
+
+Navigation2 utiliza el mapa guardado por SLAM Toolbox para localizar y navegar el tractor de forma autónoma.
+
+El flujo de navegación es:
+
+```text
+RViz2 / Goal Pose
+        │
+        ▼
+BT Navigator
+        │
+        ▼
+Planner Server
+        │
+        ▼
+Controller Server
+        │
+        ▼
+   /cmd_vel_raw
+        │
+        ▼
+ Safety Stop Node
+        │
+        ▼
+    /cmd_vel
+        │
+        ▼
+ diff_drive_controller
+```
+
+El flujo de localización es:
+
+```text
+map_server  ──► /map
+AMCL        ──► map -> odom
+LiDAR       ──► /scan
+Odometría   ──► /odom
+```
+
+Nav2 no publica directamente hacia `/cmd_vel`. Su salida se remapea a `/cmd_vel_raw` para conservar `tractor_safety` como filtro final antes del controlador.
+
+La configuración principal está en:
+
+```text
+tractor_bringup/config/nav2_params.yaml
+```
+
+Incluye:
+
+- `global_costmap` con mapa estático del huerto;
+- `local_costmap` de 2 metros alrededor del tractor;
+- `inflation_layer` para mantener margen frente a troncos;
+- AMCL para publicar `map -> odom`;
+- velocidades conservadoras para pasillos estrechos.
+
+El comportamiento ante bloqueos se documenta en:
+
+```text
+docs/06_Recovery_behaviors.md
+```
+
+El launch dedicado es:
+
+```bash
+ros2 launch tractor_bringup sim_with_nav2.launch.py
+```
+
+Scripts equivalentes:
+
+```bash
+./scripts/nav_run.sh
+./scripts/nav_rviz.sh
+```
+
+---
+
 # Obstáculos dinámicos
 
 La caja roja de prueba no forma parte fija del mundo `huerto_papayos.world`.
@@ -221,8 +310,8 @@ Utilizado para:
 
 - detección de obstáculos;
 - Safety Stop;
-- futuro SLAM;
-- futura navegación autónoma.
+- SLAM;
+- Navigation2.
 
 ---
 
@@ -244,7 +333,8 @@ Se utiliza para:
 
 - estimación de la posición del robot;
 - publicación del frame `odom`;
-- integración futura con SLAM Toolbox.
+- integración con SLAM Toolbox;
+- integración con AMCL y Navigation2.
 
 ---
 
@@ -268,7 +358,7 @@ base_link
  └── rear_right_wheel
 ```
 
-Esta estructura será reutilizada en las siguientes etapas del proyecto.
+Esta estructura sirve como base para SLAM, AMCL y Navigation2.
 
 ---
 
@@ -306,13 +396,18 @@ En la versión actual del proyecto el tractor es capaz de:
 - publicar imágenes de la cámara;
 - detenerse automáticamente ante obstáculos;
 - desplazarse mediante comandos de teclado;
-- utilizar controladores estándar de `ros2_control`.
+- utilizar controladores estándar de `ros2_control`;
+- generar mapas con SLAM Toolbox;
+- guardar mapas en `workspace/maps/`;
+- agregar y quitar obstáculos dinámicos;
+- localizarse con AMCL sobre un mapa estático;
+- ejecutar Navigation2 con costmaps y Goal Pose desde RViz2.
 
 ---
 
-# Arquitectura futura
+# Evolución implementada
 
-La arquitectura del proyecto evolucionará de forma incremental.
+La arquitectura del proyecto ha evolucionado de forma incremental.
 
 ## v0.3.0
 
@@ -330,7 +425,7 @@ Esto proporciona interfaces estándar de control para ROS 2 y prepara el proyect
 
 Integra **SLAM Toolbox**.
 
-El flujo de información incorporará:
+El flujo de información incorpora:
 
 - LiDAR
 - Odometría
@@ -343,9 +438,9 @@ permitiendo construir mapas persistentes del huerto.
 
 ## v0.5.0
 
-Finalmente se incorporará **Navigation2**.
+Integra **Navigation2**.
 
-La arquitectura añadirá:
+La arquitectura añade:
 
 - AMCL
 - Planner Server
@@ -355,7 +450,9 @@ La arquitectura añadirá:
 - Local Costmap
 - Recovery Behaviors
 
-Con ello el tractor podrá localizarse, planificar trayectorias y navegar de forma completamente autónoma dentro del huerto.
+Con ello el tractor puede localizarse, planificar trayectorias y ejecutar navegación autónoma básica dentro del huerto mediante `Goal Pose`.
+
+El ajuste fino de navegación seguirá evolucionando con pruebas de campo simulado, costmaps, inflation layer y recovery behaviors.
 
 ---
 

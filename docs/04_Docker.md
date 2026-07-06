@@ -204,14 +204,19 @@ Durante el desarrollo se recomienda:
 
 ---
 
-# Evolución futura
+# Evolución y mantenimiento
 
 La infraestructura Docker continuará utilizándose durante todas las etapas del proyecto.
 
-La imagen Docker incorpora las dependencias de simulación y control utilizadas por el proyecto, incluyendo:
+La imagen Docker incorpora las dependencias de simulación, control, mapeo y navegación utilizadas por el proyecto, incluyendo:
 
 - ros2_control;
 - ros2_controllers;
-- gazebo_ros2_control.
+- gazebo_ros2_control;
+- SLAM Toolbox;
+- Navigation2;
+- Nav2 Bringup;
+- Nav2 Map Server;
+- Diagnostic Updater.
 
-Las futuras versiones incorporarán nuevas dependencias relacionadas con SLAM Toolbox y Navigation2 sin modificar el flujo de trabajo del desarrollador.
+Las futuras versiones podrán incorporar dependencias adicionales sin modificar el flujo de trabajo del desarrollador.

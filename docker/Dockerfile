@@ -22,9 +22,12 @@ RUN mkdir -p /tmp/apt-archives/partial && \
         ros-humble-gazebo-ros-pkgs \
         ros-humble-gazebo-plugins \
         ros-humble-gazebo-ros2-control \
+        ros-humble-diagnostic-updater \
         ros-humble-ros2-control \
         ros-humble-ros2-controllers \
         ros-humble-slam-toolbox \
+        ros-humble-navigation2 \
+        ros-humble-nav2-bringup \
         ros-humble-nav2-map-server \
     && apt-get clean && \
     rm -rf \

@@ -4,7 +4,7 @@ project(tractor_bringup)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY config launch models worlds
+  DIRECTORY config launch models rviz worlds
   DESTINATION share/${PROJECT_NAME}
 )
 

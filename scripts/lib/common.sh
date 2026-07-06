@@ -12,6 +12,7 @@ WORKSPACE="${PROJECT_ROOT}/workspace"
 MAPS_DIR="${WORKSPACE}/maps"
 DEFAULT_MAP_NAME="huerto_map"
 DEFAULT_OBSTACLE_NAME="caja_obstaculo"
+DEFAULT_NAV_MAP="${MAPS_DIR}/${DEFAULT_MAP_NAME}.yaml"
 COMPOSE_FILE="${PROJECT_ROOT}/docker/docker-compose.yml"
 IMAGE_NAME="minitractor:humble"
 CONTAINER_NAME="minitractor"
@@ -215,6 +216,24 @@ check_install() {
 ensure_maps_dir() {
 
     mkdir -p "${MAPS_DIR}"
+
+}
+
+check_map_file() {
+
+    local map_file="$1"
+
+    if [ ! -f "${map_file}" ]; then
+
+        error "Mapa no encontrado."
+        info "Ruta esperada: ${map_file}"
+        info "Genera un mapa con:"
+        echo "./scripts/slam_run.sh"
+        echo "./scripts/slam_save_map.sh"
+
+        exit 1
+
+    fi
 
 }
 

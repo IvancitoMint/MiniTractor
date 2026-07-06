@@ -21,6 +21,7 @@ MiniTractor/
 ├── docs/
 ├── scripts/
 ├── workspace/
+│   ├── maps/
 │   └── src/
 │       ├── tractor_bringup/
 │       ├── tractor_description/
@@ -212,6 +213,69 @@ Para mapeo con SLAM se recomienda generar el mapa sin este obstáculo, y agregar
 
 ---
 
+# Navigation2
+
+Antes de iniciar Nav2 debe existir un mapa guardado:
+
+```text
+workspace/maps/huerto_map.yaml
+workspace/maps/huerto_map.pgm
+```
+
+Iniciar la simulación con Navigation2:
+
+```bash
+./scripts/nav_run.sh
+```
+
+Usar otro mapa:
+
+```bash
+./scripts/nav_run.sh ~/MiniTractor/workspace/maps/otro_mapa.yaml
+```
+
+Comando manual equivalente:
+
+```bash
+ros2 launch tractor_bringup sim_with_nav2.launch.py \
+  map:=~/MiniTractor/workspace/maps/huerto_map.yaml
+```
+
+Comando base de Nav2 encapsulado por el proyecto:
+
+```bash
+ros2 launch nav2_bringup bringup_launch.py map:=/path/to/huerto_map.yaml
+```
+
+Abrir RViz2 para enviar objetivos:
+
+```bash
+./scripts/nav_rviz.sh
+```
+
+Flujo recomendado:
+
+```text
+Terminal 1: ./scripts/nav_run.sh
+Terminal 2: ./scripts/nav_rviz.sh
+```
+
+En RViz2:
+
+- usa `2D Pose Estimate` si AMCL necesita pose inicial;
+- usa `Goal Pose` para enviar un objetivo;
+- revisa `Global Costmap`, `Local Costmap` y `Global Plan`.
+
+Nav2 publica comandos hacia `/cmd_vel_raw`, para que Safety Stop siga filtrando antes de `/cmd_vel`.
+
+Reporte técnico de recuperación:
+
+```text
+docs/06_Recovery_behaviors.md
+```
+
+---
+
 # Teleoperación
 
 En una segunda terminal, entrar al contenedor y ejecutar:
@@ -348,6 +412,8 @@ ros2 topic info /cmd_vel_raw
 ros2 topic info /cmd_vel
 ros2 topic info /scan
 ros2 topic info /odom
+ros2 topic info /map
+ros2 topic info /amcl_pose
 ```
 
 Escuchar mensajes:
@@ -357,6 +423,7 @@ ros2 topic echo /scan --once
 ros2 topic echo /odom --once
 ros2 topic echo /cmd_vel_raw
 ros2 topic echo /cmd_vel
+ros2 topic echo /amcl_pose --once
 ```
 
 Medir frecuencias:
@@ -365,6 +432,13 @@ Medir frecuencias:
 ros2 topic hz /scan
 ros2 topic hz /odom
 ros2 topic hz /joint_states
+```
+
+Costmaps de Nav2:
+
+```bash
+ros2 topic info /global_costmap/costmap
+ros2 topic info /local_costmap/costmap
 ```
 
 ---
@@ -427,6 +501,15 @@ ros2 param list /safety_stop_node
 ros2 param get /safety_stop_node stop_distance
 ros2 param get /safety_stop_node forward_angle_deg
 ```
+
+Valores actuales del launch base:
+
+```text
+stop_distance = 0.8 m
+forward_angle_deg = 45.0
+```
+
+El ángulo se evalúa hacia ambos lados del frente del LiDAR, por lo que cubre aproximadamente 90 grados frontales.
 
 ---
 

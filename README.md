@@ -22,12 +22,12 @@ Actualmente el proyecto incluye:
 - SLAM Toolbox
 - Guardado de mapas con `nav2_map_server`
 - Obstáculos dinámicos en Gazebo
+- Navigation2
+- RViz2 para navegación
 
-En futuras versiones se integrarán:
+En próximas etapas se trabajará en:
 
-- RViz2
-- Nav2
-- Navegación autónoma
+- ajuste fino de navegación autónoma
 - Visión artificial
 
 ---
@@ -55,6 +55,7 @@ En futuras versiones se integrarán:
 - ros2_controllers
 - SLAM Toolbox
 - Navigation2 Map Server
+- Navigation2
 - Git
 
 ---
@@ -100,15 +101,16 @@ MiniTractor/
 
 ## Fase 5
 
-- [ ] Nav2
+- [x] Nav2
 
 ## Fase 6
 
-- [ ] RViz2
+- [x] RViz2
 
 ## Fase 7
 
-- [ ] Navegación Autónoma
+- [x] Navegación Autónoma básica con Goal Pose
+- [ ] Ajuste fino de navegación autónoma
 
 ---
 
@@ -118,6 +120,12 @@ Toda la documentación del proyecto se encuentra en:
 
 ```
 docs/
+```
+
+Documento recomendado para navegación:
+
+```text
+docs/06_Recovery_behaviors.md
 ```
 
 ---

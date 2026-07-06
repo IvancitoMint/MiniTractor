@@ -80,7 +80,7 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'stop_distance': 0.8,
-            'forward_angle_deg': 25.0
+            'forward_angle_deg': 45.0
         }]
     )
 

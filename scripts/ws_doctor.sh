@@ -47,12 +47,20 @@ PACKAGES=(
     tractor_description
     tractor_bringup
     tractor_safety
+    diagnostic_updater
     gazebo_ros2_control
     controller_manager
     diff_drive_controller
     joint_state_broadcaster
     slam_toolbox
+    nav2_amcl
+    nav2_bringup
+    nav2_bt_navigator
+    nav2_controller
+    nav2_lifecycle_manager
     nav2_map_server
+    nav2_planner
+    nav2_behaviors
 )
 
 for PKG in "${PACKAGES[@]}"; do

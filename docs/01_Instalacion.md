@@ -173,7 +173,7 @@ cd MiniTractor
 
 # 5. Construir la imagen Docker
 
-### Linux, macOs y Windows + WSL2
+### Linux, macOS y Windows + WSL2
 
 ```bash
 ./scripts/docker_build.sh
@@ -223,7 +223,7 @@ Esto se soluciona deteniendo la simulación presionando:
 ctrl + c
 ```
 
-Luego ejecutamos la simulación por segunda y ahora el ángulo de la cámara debería ser el corrcto.
+Luego ejecutamos la simulación por segunda vez y ahora el ángulo de la cámara debería ser el correcto.
 ```bash
 ./scripts/sim_run.sh
 ```
@@ -248,6 +248,56 @@ Ejecutar:
 
 ---
 
+# 10. Mapeo con SLAM
+
+Para generar un mapa del huerto, inicia la simulación con SLAM:
+
+```bash
+./scripts/slam_run.sh
+```
+
+En otra terminal dentro del contenedor, teleopera el tractor:
+
+```bash
+./scripts/sim_teleop.sh
+```
+
+Cuando el recorrido esté completo, guarda el mapa:
+
+```bash
+./scripts/slam_save_map.sh
+```
+
+Esto genera los archivos:
+
+```text
+workspace/maps/huerto_map.pgm
+workspace/maps/huerto_map.yaml
+```
+
+---
+
+# 11. Navegación con Nav2
+
+Con el mapa generado, inicia Navigation2:
+
+```bash
+./scripts/nav_run.sh
+```
+
+En otra terminal dentro del contenedor, abre RViz2:
+
+```bash
+./scripts/nav_rviz.sh
+```
+
+Desde RViz2 puedes usar:
+
+- `2D Pose Estimate`, si necesitas corregir la localización inicial;
+- `Goal Pose`, para enviar un objetivo de navegación.
+
+---
+
 # Verificación
 
 La instalación es correcta cuando:
@@ -260,3 +310,6 @@ La instalación es correcta cuando:
 - El tractor aparece en el mundo virtual.
 - El tractor responde a los comandos del teclado.
 - El nodo Safety Stop funciona correctamente.
+- SLAM puede publicar `/map` y guardar `huerto_map`.
+- Nav2 puede cargar el mapa y publicar costmaps.
+- RViz2 abre la configuración de navegación.
