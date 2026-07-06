@@ -9,10 +9,11 @@ banner
 
 check_docker
 check_docker_context
+check_compose_file
 
 info "Deteniendo contenedores activos..."
 
-docker ps --filter "name=minitractor" -q | xargs -r docker stop
+stop_project_containers
 
 info "Eliminando contenedores detenidos..."
 

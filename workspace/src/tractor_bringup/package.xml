@@ -13,6 +13,7 @@
   <exec_depend>tractor_safety</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
   <exec_depend>xacro</exec_depend>
 
   <export>

@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess
+from launch.substitutions import Command
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.parameter_descriptions import ParameterValue
@@ -9,16 +10,27 @@ import os
 def generate_launch_description():
     pkg_share = get_package_share_directory('tractor_description')
     xacro_file = os.path.join(pkg_share, 'urdf', 'tractor.urdf.xacro')
-
-    robot_description_content = os.popen(f'xacro {xacro_file}').read()
+    controllers_file = os.path.join(pkg_share, 'config', 'ros2_controllers.yaml')
 
     robot_description = {
-        'robot_description': robot_description_content
+        'robot_description': ParameterValue(
+            Command([
+                'xacro ',
+                xacro_file,
+                ' controllers_file:=',
+                controllers_file
+            ]),
+            value_type=str
+        )
     }
 
-
     gazebo = ExecuteProcess(
-        cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so'],
+        cmd=[
+            'gazebo',
+            '--verbose',
+            '-s', 'libgazebo_ros_init.so',
+            '-s', 'libgazebo_ros_factory.so'
+        ],
         output='screen'
     )
 
@@ -27,20 +39,6 @@ def generate_launch_description():
         executable='robot_state_publisher',
         output='screen',
         parameters=[robot_description]
-    )
-
-    controller_manager = Node(
-        package='controller_manager',
-        executable='ros2_control_node',
-        output='screen',
-        parameters=[
-            robot_description,
-            os.path.join(
-                get_package_share_directory('tractor_description'),
-                'config',
-                'ros2_controllers.yaml'
-            )
-        ]
     )
 
     spawn_entity = Node(
@@ -59,7 +57,5 @@ def generate_launch_description():
     return LaunchDescription([
         gazebo,
         robot_state_publisher,
-	controller_manager,
-	spawn_entity,
-	safety_node 
- ])
+        spawn_entity
+    ])

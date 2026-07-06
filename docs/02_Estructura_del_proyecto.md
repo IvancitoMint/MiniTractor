@@ -121,8 +121,8 @@ Se encargan de administrar el contenedor.
 | Script | Función |
 |---------|---------|
 | docker_build.sh | Construye la imagen Docker. |
-| docker_shell.sh | Inicia un contenedor interactivo. |
-| docker_stop.sh | Detiene y elimina los contenedores temporales. |
+| docker_shell.sh | Inicia un contenedor interactivo y construye la imagen si no existe. |
+| docker_stop.sh | Detiene contenedores activos del proyecto y limpia contenedores detenidos. |
 
 ---
 
@@ -133,7 +133,7 @@ Permiten ejecutar la simulación del tractor.
 | Script | Función |
 |---------|---------|
 | sim_run.sh | Inicia Gazebo y todos los nodos del proyecto. |
-| sim_stop.sh | Finaliza la simulación. |
+| sim_stop.sh | Detiene procesos locales de simulación sin administrar Docker. |
 | sim_teleop.sh | Controla el tractor mediante teclado. |
 
 ---
@@ -145,7 +145,7 @@ Automatizan las tareas relacionadas con el workspace de ROS 2.
 | Script | Función |
 |---------|---------|
 | ws_build.sh | Compila el workspace mediante colcon. |
-| ws_clean.sh | Elimina build, install y log. |
+| ws_clean.sh | Elimina build, install y log tras confirmación. |
 | ws_doctor.sh | Verifica el estado del entorno de desarrollo. |
 
 ---
@@ -218,7 +218,8 @@ Describe físicamente el robot.
 
 Contiene:
 
-- modelo URDF/Xacro
+- modelo URDF/Xacro modular
+- configuración de ros2_control
 - mallas (meshes)
 - mundos de Gazebo
 - configuraciones de RViz

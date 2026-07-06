@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="tractor_sensors">
+    <link name="camera_link">
+      <visual>
+        <geometry>
+          <box size="${camera_size} ${camera_size} ${camera_size}"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+
+      <collision>
+        <geometry>
+          <box size="${camera_size} ${camera_size} ${camera_size}"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="0.5"/>
+        <inertia
+          ixx="0.001" ixy="0.0" ixz="0.0"
+          iyy="0.001" iyz="0.0"
+          izz="0.001"/>
+      </inertial>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="camera_link"/>
+      <origin xyz="0.42 0 0.20" rpy="0 0 0"/>
+    </joint>
+
+    <link name="lidar_link">
+      <visual>
+        <geometry>
+          <cylinder radius="${lidar_radius}" length="${lidar_height}"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+
+      <collision>
+        <geometry>
+          <cylinder radius="${lidar_radius}" length="${lidar_height}"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="0.3"/>
+        <inertia
+          ixx="0.001" ixy="0.0" ixz="0.0"
+          iyy="0.001" iyz="0.0"
+          izz="0.001"/>
+      </inertial>
+    </link>
+
+    <joint name="lidar_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="lidar_link"/>
+      <origin xyz="0.35 0 0.20" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+</robot>

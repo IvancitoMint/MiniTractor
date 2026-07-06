@@ -145,8 +145,8 @@ El proyecto proporciona scripts para simplificar el uso de Docker.
 | Script | Función |
 |---------|---------|
 | docker_build.sh | Construye la imagen Docker del proyecto. |
-| docker_shell.sh | Inicia un contenedor interactivo. |
-| docker_stop.sh | Detiene y elimina los contenedores temporales. |
+| docker_shell.sh | Inicia un contenedor interactivo y construye la imagen si no existe. |
+| docker_stop.sh | Detiene contenedores activos del proyecto y limpia contenedores detenidos. |
 
 Estos scripts constituyen la forma recomendada de interactuar con Docker.
 
@@ -208,10 +208,10 @@ Durante el desarrollo se recomienda:
 
 La infraestructura Docker continuará utilizándose durante todas las etapas del proyecto.
 
-Las futuras versiones incorporarán nuevas dependencias relacionadas con:
+La imagen Docker incorpora las dependencias de simulación y control utilizadas por el proyecto, incluyendo:
 
 - ros2_control;
-- SLAM Toolbox;
-- Navigation2.
+- ros2_controllers;
+- gazebo_ros2_control.
 
-Estas herramientas se añadirán a la imagen Docker sin modificar el flujo de trabajo del desarrollador.
+Las futuras versiones incorporarán nuevas dependencias relacionadas con SLAM Toolbox y Navigation2 sin modificar el flujo de trabajo del desarrollador.

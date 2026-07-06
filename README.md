@@ -16,11 +16,12 @@ Actualmente el proyecto incluye:
 - Cámara RGB
 - Sensor LiDAR
 - Sistema de frenado reactivo por LiDAR
-- Control mediante `/cmd_vel`
+- Control mediante `ros2_control`
+- `diff_drive_controller`
+- `joint_state_broadcaster`
 
 En futuras versiones se integrarán:
 
-- ros2_control
 - RViz2
 - SLAM
 - Nav2
@@ -48,18 +49,16 @@ En futuras versiones se integrarán:
 - URDF
 - Python
 - CMake
-- Git
-
-Próximamente:
-
 - ros2_control
+- ros2_controllers
+- Git
 
 ---
 
 # Estructura del proyecto
 
 ```text
-tractor_project/
+MiniTractor/
 ├── docs/
 ├── docker/
 ├── scripts/
@@ -89,7 +88,7 @@ tractor_project/
 
 ## Fase 3
 
-- [ ] ros2_control
+- [x] ros2_control
 
 ## Fase 4
 

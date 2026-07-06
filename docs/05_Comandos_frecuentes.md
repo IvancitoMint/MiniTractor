@@ -1,294 +1,234 @@
 # Comandos frecuentes
 
-Este documento reúne los comandos más utilizados durante el desarrollo del proyecto MiniTractor.
+Este documento reúne los comandos más utilizados durante el desarrollo de **MiniTractor**.
+
+Los comandos de ROS 2 deben ejecutarse dentro del contenedor Docker del proyecto, salvo que se indique lo contrario.
 
 ---
 
 # Estructura del proyecto
 
 ```bash
-cd ~/tractor_project
+cd ~/MiniTractor
 tree -L 3
 ```
 
-```
-.
-├── docker
-│   ├── docker-compose.yml
-│   ├── Dockerfile
-│   └── entrypoint.sh
-├── docs
-│   ├── 01_Instalacion.md
-│   ├── 02_Estructura_del_proyecto.md
-│   ├── 03_Arquitectura.md
-│   ├── 04_Docker.md
-│   └── 05_Comandos_frecuentes.md
-├── scripts
-│   ├── docker_build.sh
-│   ├── docker_shell.sh
-│   ├── docker_stop.sh
-│   ├── sim_run.sh
-│   ├── sim_stop.sh
-│   ├── sim_teleop_.sh
-│   ├── ws_build.sh
-│   ├── ws_clean.sh
-│   ├── ws_doctor.sh
-│   ├── lib
-│   │   └── common.sh
-│   └── run.sh
-├── .gitignore
-├── contexto.md
+Estructura esperada:
+
+```text
+MiniTractor/
+├── docker/
+├── docs/
+├── scripts/
+├── workspace/
+│   └── src/
+│       ├── tractor_bringup/
+│       ├── tractor_description/
+│       └── tractor_safety/
+├── AGENTS.md
 ├── README.md
-└── workspace
-    ├── build
-    │   ├── COLCON_IGNORE
-    │   ├── tractor_bringup
-    │   ├── tractor_description
-    │   └── tractor_safety
-    ├── install
-    │   ├── COLCON_IGNORE
-    │   ├── local_setup.bash
-    │   ├── local_setup.ps1
-    │   ├── local_setup.sh
-    │   ├── _local_setup_util_ps1.py
-    │   ├── _local_setup_util_sh.py
-    │   ├── local_setup.zsh
-    │   ├── setup.bash
-    │   ├── setup.ps1
-    │   ├── setup.sh
-    │   ├── setup.zsh
-    │   ├── tractor_bringup
-    │   ├── tractor_description
-    │   └── tractor_safety
-    ├── log
-    │   ├── build_2026-07-04_14-04-28
-    │   ├── COLCON_IGNORE
-    │   ├── latest -> latest_build
-    │   └── latest_build -> build_2026-07-04_14-04-28
-    └── src
-        ├── tractor_bringup
-        ├── tractor_description
-        └── tractor_safety
-
+└── .gitignore
 ```
 
 ---
 
-# Configurar entorno ROS 2
+# Docker
+
+Construir la imagen:
 
 ```bash
-cd ~/tractor_project/workspace
+./scripts/docker_build.sh
+```
 
+Entrar al contenedor:
+
+```bash
+./scripts/docker_shell.sh
+```
+
+Detener contenedores del proyecto:
+
+```bash
+./scripts/docker_stop.sh
+```
+
+Este comando es el punto explícito para detener contenedores Docker de MiniTractor.
+
+---
+
+# Workspace
+
+Compilar:
+
+```bash
+./scripts/ws_build.sh
+```
+
+Limpiar `build/`, `install/` y `log/` tras confirmación:
+
+```bash
+./scripts/ws_clean.sh
+```
+
+Diagnosticar el entorno:
+
+```bash
+./scripts/ws_doctor.sh
+```
+
+Compilación manual:
+
+```bash
+cd ~/MiniTractor/workspace
 source /opt/ros/humble/setup.bash
-source install/setup.bash
-```
-
----
-
-# Scripts del proyecto
-
-Los scripts principales se encuentran en:
-
-```text
-~/tractor_project/scripts/
-```
-
-## Compilar
-
-```bash
-cd ~/tractor_project
-
-./scripts/build.sh
-```
-
-Funciones:
-
-- Verifica que exista el workspace.
-- Verifica que ROS 2 Humble esté instalado.
-- Carga el entorno de ROS.
-- Ejecuta `colcon build --symlink-install`.
-
----
-
-## Ejecutar simulación
-
-```bash
-cd ~/tractor_project
-
-./scripts/run.sh
-```
-
-Funciones:
-
-- Verifica que el workspace exista.
-- Verifica que el workspace esté compilado.
-- Carga ROS 2.
-- Carga el workspace.
-- Ejecuta:
-
-```bash
-ros2 launch tractor_bringup sim_with_safety.launch.py
-```
-
----
-
-## Limpiar workspace
-
-```bash
-cd ~/tractor_project
-
-./scripts/clean.sh
-```
-
-Elimina:
-
-```text
-workspace/build/
-workspace/install/
-workspace/log/
-```
-
----
-
-## Diagnóstico
-
-```bash
-cd ~/tractor_project
-
-./scripts/doctor.sh
-```
-
-Comprueba:
-
-- ROS 2 Humble
-- Gazebo
-- colcon
-- xacro
-- Workspace
-- tractor_description
-- tractor_bringup
-- tractor_safety
-
----
-
-# Compilación manual
-
-```bash
-cd ~/tractor_project/workspace
-
-source /opt/ros/humble/setup.bash
-
 colcon build --symlink-install
-
 source install/setup.bash
 ```
 
----
-
-## Compilar un paquete
+Compilar un paquete específico:
 
 ```bash
 colcon build --packages-select tractor_description --symlink-install
-```
-
-```bash
 colcon build --packages-select tractor_bringup --symlink-install
-```
-
-```bash
 colcon build --packages-select tractor_safety --symlink-install
 ```
 
 ---
 
-# Ejecutar simulación manualmente
+# Simulación
+
+Iniciar la simulación completa:
 
 ```bash
-cd ~/tractor_project/workspace
+./scripts/sim_run.sh
+```
 
+Detener procesos locales de simulación:
+
+```bash
+./scripts/sim_stop.sh
+```
+
+Este comando no detiene contenedores Docker. Para eso usa `./scripts/docker_stop.sh`.
+
+Lanzamiento manual:
+
+```bash
+cd ~/MiniTractor/workspace
 source /opt/ros/humble/setup.bash
 source install/setup.bash
-
 ros2 launch tractor_bringup sim_with_safety.launch.py
 ```
 
----
+Visualizar únicamente el modelo del tractor en Gazebo:
 
-# Arquitectura de control
-
-Actualmente el flujo es:
-
-```text
-Usuario
-      │
-      ▼
-/cmd_vel_raw
-      │
-      ▼
-SafetyStopNode
-      │
-      ▼
-/cmd_vel
-      │
-      ▼
-gazebo_ros_diff_drive
-      │
-      ▼
-Tractor
+```bash
+ros2 launch tractor_description display.launch.py
 ```
 
-**Nunca** publicar directamente sobre `/cmd_vel`.
+---
+
+# Teleoperación
+
+En una segunda terminal, entrar al contenedor y ejecutar:
+
+```bash
+./scripts/sim_teleop.sh
+```
+
+Comando manual equivalente:
+
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard \
+  --ros-args \
+  --remap cmd_vel:=/cmd_vel_raw \
+  -p speed:=0.5 \
+  -p turn:=1.8
+```
+
+Para ajustar la sensibilidad desde el script:
+
+```bash
+TELEOP_TURN=2.0 ./scripts/sim_teleop.sh
+```
+
+Teclas principales:
+
+| Tecla | Acción |
+|-------|--------|
+| `i` | Avanzar |
+| `,` | Retroceder |
+| `j` | Girar izquierda |
+| `l` | Girar derecha |
+| `k` | Detener |
+| `u` | Avanzar girando izquierda |
+| `o` | Avanzar girando derecha |
+| `m` | Retroceder girando |
+| `.` | Retroceder girando |
 
 ---
 
-# Movimiento del tractor
+# Arquitectura de control actual
 
-## Avanzar
+Actualmente el flujo de comandos es:
+
+```text
+Usuario / teleoperación
+        │
+        ▼
+   /cmd_vel_raw
+        │
+        ▼
+ SafetyStopNode
+        │
+        ▼
+    /cmd_vel
+        │
+        ▼
+ diff_drive_controller
+        │
+        ▼
+ ros2_control / Gazebo
+        │
+        ▼
+     Tractor
+```
+
+No se recomienda publicar directamente sobre `/cmd_vel`, porque evita el filtro de seguridad.
+
+---
+
+# Movimiento manual
+
+Avanzar:
 
 ```bash
 ros2 topic pub --rate 10 /cmd_vel_raw geometry_msgs/msg/Twist \
 "{linear: {x: 0.5}, angular: {z: 0.0}}"
 ```
 
----
-
-## Retroceder
+Retroceder:
 
 ```bash
 ros2 topic pub --rate 10 /cmd_vel_raw geometry_msgs/msg/Twist \
 "{linear: {x: -0.5}, angular: {z: 0.0}}"
 ```
 
----
-
-## Girar izquierda
+Girar izquierda:
 
 ```bash
 ros2 topic pub --rate 10 /cmd_vel_raw geometry_msgs/msg/Twist \
 "{linear: {x: 0.0}, angular: {z: 0.8}}"
 ```
 
----
-
-## Girar derecha
+Girar derecha:
 
 ```bash
 ros2 topic pub --rate 10 /cmd_vel_raw geometry_msgs/msg/Twist \
 "{linear: {x: 0.0}, angular: {z: -0.8}}"
 ```
 
----
-
-## Avanzar girando
-
-```bash
-ros2 topic pub --rate 10 /cmd_vel_raw geometry_msgs/msg/Twist \
-"{linear: {x: 0.4}, angular: {z: 0.4}}"
-```
-
----
-
-## Detener
+Detener:
 
 ```bash
 ros2 topic pub --once /cmd_vel_raw geometry_msgs/msg/Twist \
@@ -297,194 +237,94 @@ ros2 topic pub --once /cmd_vel_raw geometry_msgs/msg/Twist \
 
 ---
 
-# Control mediante teclado
+# Inspección ROS 2
 
-```bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard \
---ros-args --remap cmd_vel:=/cmd_vel_raw
-```
-
-Teclas principales:
-
-| Tecla | Acción |
-|-------|--------|
-| i | Avanzar |
-| , | Retroceder |
-| j | Girar izquierda |
-| l | Girar derecha |
-| k | Detener |
-| u | Avanzar girando izquierda |
-| o | Avanzar girando derecha |
-
----
-
-# Nodos
-
-Mostrar todos los nodos:
+Listar nodos:
 
 ```bash
 ros2 node list
 ```
 
-Información de un nodo:
-
-```bash
-ros2 node info /gazebo
-```
+Inspeccionar el nodo Safety Stop:
 
 ```bash
 ros2 node info /safety_stop_node
 ```
 
----
-
-# Topics
-
-Mostrar topics:
+Listar tópicos:
 
 ```bash
 ros2 topic list
 ```
 
-Información de un topic:
+Inspeccionar tópicos principales:
 
 ```bash
 ros2 topic info /cmd_vel_raw
-```
-
-```bash
 ros2 topic info /cmd_vel
-```
-
-```bash
 ros2 topic info /scan
+ros2 topic info /odom
 ```
 
----
-
-# Escuchar mensajes
-
-Odometría:
-
-```bash
-ros2 topic echo /odom --once
-```
-
-LiDAR:
+Escuchar mensajes:
 
 ```bash
 ros2 topic echo /scan --once
-```
-
-Comandos enviados:
-
-```bash
+ros2 topic echo /odom --once
 ros2 topic echo /cmd_vel_raw
-```
-
-Comandos hacia el tractor:
-
-```bash
 ros2 topic echo /cmd_vel
 ```
 
----
-
-# Frecuencia de publicación
+Medir frecuencias:
 
 ```bash
 ros2 topic hz /scan
-```
-
-```bash
 ros2 topic hz /odom
-```
-
-```bash
 ros2 topic hz /joint_states
 ```
 
 ---
 
-# Verificar Safety Stop
+# Sensores
 
-```bash
-ros2 topic info /cmd_vel_raw
-```
-
-Resultado esperado:
-
-```
-Publisher count: 1
-Subscription count: 1
-```
-
-```bash
-ros2 topic info /cmd_vel
-```
-
-Resultado esperado:
-
-```
-Publisher count: 1
-Subscription count: 1
-```
-
----
-
-# LiDAR
+LiDAR:
 
 ```bash
 ros2 topic echo /scan --once
-```
-
-```bash
 ros2 topic hz /scan
 ```
 
----
-
-# Cámara
+Cámara:
 
 ```bash
 ros2 topic info /front_camera/image_raw
-```
-
-```bash
 ros2 topic info /front_camera/camera_info
 ```
 
----
-
-# Odometría
+Odometría:
 
 ```bash
 ros2 topic echo /odom --once
-```
-
-```bash
 ros2 topic hz /odom
 ```
 
 ---
 
-# Transformaciones TF
+# TF
+
+Verificar mensajes TF:
 
 ```bash
 ros2 topic echo /tf --once
 ```
 
-Instalar herramientas:
-
-```bash
-sudo apt install ros-humble-tf2-tools
-```
-
-Generar árbol TF:
+Generar el árbol de frames:
 
 ```bash
 ros2 run tf2_tools view_frames
 ```
+
+Si la herramienta no está disponible, debe añadirse a la imagen Docker en una etapa controlada.
 
 ---
 
@@ -496,29 +336,19 @@ Listar parámetros:
 ros2 param list
 ```
 
-Parámetros del Safety Stop:
+Consultar parámetros del Safety Stop:
 
 ```bash
 ros2 param list /safety_stop_node
-```
-
-Consultar un parámetro:
-
-```bash
 ros2 param get /safety_stop_node stop_distance
+ros2 param get /safety_stop_node forward_angle_deg
 ```
 
 ---
 
-# Paquetes ROS
+# Paquetes
 
-Todos los paquetes:
-
-```bash
-ros2 pkg list
-```
-
-Buscar paquetes del proyecto:
+Listar paquetes del proyecto:
 
 ```bash
 ros2 pkg list | grep tractor
@@ -532,72 +362,35 @@ ros2 pkg list | grep gazebo
 
 ---
 
-# Validar el Xacro
+# Xacro
 
-Mostrar el URDF generado:
+Validar el Xacro:
 
 ```bash
-xacro ~/tractor_project/workspace/src/tractor_description/urdf/tractor.urdf.xacro
+xacro ~/MiniTractor/workspace/src/tractor_description/urdf/tractor.urdf.xacro
 ```
 
-Guardar el resultado:
+Guardar el URDF generado:
 
 ```bash
-xacro ~/tractor_project/workspace/src/tractor_description/urdf/tractor.urdf.xacro > /tmp/robot.urdf
-```
-
----
-
-# Buscar archivos
-
-```bash
-find ~/tractor_project -name "tractor.urdf.xacro"
+xacro ~/MiniTractor/workspace/src/tractor_description/urdf/tractor.urdf.xacro > /tmp/mini_tractor.urdf
 ```
 
 ---
 
-# Buscar texto dentro del proyecto
+# Búsqueda
+
+Buscar archivos:
 
 ```bash
-grep -R "gazebo_ros_diff_drive" ~/tractor_project/workspace/src
+find ~/MiniTractor -name "tractor.urdf.xacro"
 ```
 
-```bash
-grep -R "cmd_vel_raw" ~/tractor_project/workspace/src
-```
-
----
-
-# Mostrar partes de un archivo
+Buscar texto:
 
 ```bash
-sed -n '1,120p' archivo
-```
-
-Ejemplo:
-
-```bash
-sed -n '200,260p' \
-~/tractor_project/workspace/src/tractor_description/urdf/tractor.urdf.xacro
-```
-
----
-
-# Matar procesos de Gazebo
-
-```bash
-killall -9 gzserver gzclient gazebo 2>/dev/null
-
-pkill -f gzserver
-pkill -f gzclient
-pkill -f gazebo
-pkill -f spawn_entity
-```
-
-Verificar:
-
-```bash
-ps aux | grep -E "gazebo|gzserver|gzclient|spawn_entity"
+grep -R "gazebo_ros2_control" ~/MiniTractor/workspace/src
+grep -R "cmd_vel_raw" ~/MiniTractor/workspace/src
 ```
 
 ---
@@ -608,24 +401,6 @@ Estado del repositorio:
 
 ```bash
 git status
-```
-
-Agregar cambios:
-
-```bash
-git add .
-```
-
-Crear commit:
-
-```bash
-git commit -m "Initial commit"
-```
-
-Crear etiqueta:
-
-```bash
-git tag -a v0.1.0 -m "First stable release"
 ```
 
 Ver historial:
@@ -644,21 +419,19 @@ git tag
 
 # ros2_control
 
-Reservado para futuras fases.
-
 Listar controladores:
 
 ```bash
 ros2 control list_controllers
 ```
 
-Interfaces:
+Listar interfaces de hardware:
 
 ```bash
 ros2 control list_hardware_interfaces
 ```
 
-Hardware:
+Listar componentes de hardware:
 
 ```bash
 ros2 control list_hardware_components

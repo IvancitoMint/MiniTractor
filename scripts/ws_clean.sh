@@ -5,42 +5,26 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/common.sh"
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-WORKSPACE="${PROJECT_ROOT}/workspace"
+banner
 
-echo "MiniTractor - Clean"
+check_workspace
+
+warning "Se eliminarán los directorios generados por colcon:"
 echo
-
-if [ ! -d "${WORKSPACE}" ]; then
-    echo "Error: No existe el workspace."
-    exit 1
-fi
-
-cd "${WORKSPACE}"
-
-echo "Se eliminarán:"
-echo
-
 echo "  build/"
 echo "  install/"
 echo "  log/"
 echo
 
-read -rp "¿Continuar? [y/N]: " RESP
+if ! confirm "¿Continuar?"; then
+    echo
+    info "Operación cancelada."
+    exit 0
+fi
 
-case "$RESP" in
-    y|Y)
+cd "${WORKSPACE}"
 
-        rm -rf build install log
+rm -rf build install log
 
-        echo
-        echo "Workspace limpiado correctamente."
-        ;;
-
-    *)
-
-        echo
-        echo "Operación cancelada."
-        ;;
-
-esac
+echo
+success "Workspace limpiado correctamente."

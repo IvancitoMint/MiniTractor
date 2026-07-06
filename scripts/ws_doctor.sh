@@ -5,34 +5,16 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/common.sh"
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-WORKSPACE="${PROJECT_ROOT}/workspace"
+banner
 
-echo "MiniTractor - Doctor"
-echo
+info "Revisando entorno de desarrollo..."
 
-check_ok() {
-    printf "%-45s OK\n" "$1"
-}
-
-check_fail() {
-    printf "%-45s ERROR\n" "$1"
-}
-
-#############################################
-# ROS
-#############################################
-
-if [ -f "/opt/ros/humble/setup.bash" ]; then
+if [ -f /opt/ros/humble/setup.bash ]; then
     check_ok "ROS 2 Humble"
 else
     check_fail "ROS 2 Humble"
     exit 1
 fi
-
-#############################################
-# Workspace
-#############################################
 
 if [ -d "${WORKSPACE}" ]; then
     check_ok "Workspace"
@@ -41,49 +23,19 @@ else
     exit 1
 fi
 
-#############################################
-# install
-#############################################
-
 if [ -f "${WORKSPACE}/install/setup.bash" ]; then
     check_ok "Workspace compilado"
 else
-    check_fail "Workspace compilado"
+    check_warn "Workspace compilado"
 fi
 
-#############################################
-# Gazebo
-#############################################
+check_command gazebo "Gazebo" || true
+check_command xacro "xacro" || true
+check_command colcon "colcon" || true
+check_command ros2 "ros2 CLI" || true
 
-if command -v gazebo >/dev/null; then
-    check_ok "Gazebo"
-else
-    check_fail "Gazebo"
-fi
-
-#############################################
-# xacro
-#############################################
-
-if command -v xacro >/dev/null; then
-    check_ok "xacro"
-else
-    check_fail "xacro"
-fi
-
-#############################################
-# colcon
-#############################################
-
-if command -v colcon >/dev/null; then
-    check_ok "colcon"
-else
-    check_fail "colcon"
-fi
-
-#############################################
-# Paquetes
-#############################################
+echo
+info "Revisando paquetes ROS..."
 
 source /opt/ros/humble/setup.bash
 
@@ -95,11 +47,11 @@ PACKAGES=(
     tractor_description
     tractor_bringup
     tractor_safety
+    gazebo_ros2_control
+    controller_manager
+    diff_drive_controller
+    joint_state_broadcaster
 )
-
-echo
-echo "Paquetes:"
-echo
 
 for PKG in "${PACKAGES[@]}"; do
 
@@ -112,4 +64,4 @@ for PKG in "${PACKAGES[@]}"; do
 done
 
 echo
-echo "Diagnóstico finalizado."
+success "Diagnóstico finalizado."

@@ -9,13 +9,11 @@ banner
 
 check_docker
 check_docker_context
-
-COMPOSE_FILE="${PROJECT_ROOT}/docker/docker-compose.yml"
+check_compose_file
 
 info "Construyendo imagen Docker..."
 
-USER_UID=$(id -u) USER_GID=$(id -g) \
-docker compose -f "${COMPOSE_FILE}" build
+docker_compose build
 
 echo
 success "Imagen construida correctamente."

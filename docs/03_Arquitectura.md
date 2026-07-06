@@ -39,6 +39,7 @@ Entre ellos:
 
 - URDF
 - Xacro
+- configuración de ros2_control
 - Meshes
 - Configuración de RViz
 - Mundos de Gazebo
@@ -88,15 +89,18 @@ Actualmente el flujo de información puede representarse de la siguiente manera:
 ```
                  Teleop
                     │
-               /cmd_vel
+             /cmd_vel_raw
                     │
                     ▼
             Safety Stop Node
                     │
-             /cmd_vel_safe
+                /cmd_vel
                     │
                     ▼
-          Gazebo Diff Drive Plugin
+          diff_drive_controller
+                    │
+                    ▼
+        ros2_control / Gazebo
                     │
       ┌─────────────┴─────────────┐
       │                           │
@@ -117,6 +121,9 @@ Toda la comunicación entre componentes se realiza mediante los mecanismos está
 - TF
 - Launch Files
 - Parámetros
+
+El tópico `/cmd_vel_raw` es la entrada de comandos del usuario o de herramientas de teleoperación.
+El tópico `/cmd_vel` queda reservado como salida filtrada del nodo Safety Stop hacia `diff_drive_controller`.
 
 ---
 
@@ -196,8 +203,9 @@ ocurre la siguiente secuencia:
 3. Se carga el mundo del huerto.
 4. Se publica el modelo del tractor.
 5. El robot es insertado en la simulación.
-6. Se inicia el nodo Safety Stop.
-7. Comienza la publicación de sensores y transformaciones.
+6. Se activan `joint_state_broadcaster` y `diff_drive_controller`.
+7. Se inicia el nodo Safety Stop.
+8. Comienza la publicación de sensores, odometría y transformaciones.
 
 Una vez completado este proceso, el tractor queda listo para recibir comandos mediante teleoperación.
 
@@ -213,11 +221,8 @@ En la versión actual del proyecto el tractor es capaz de:
 - publicar datos del LiDAR;
 - publicar imágenes de la cámara;
 - detenerse automáticamente ante obstáculos;
-- desplazarse mediante comandos de teclado.
-
-Actualmente el giro del tractor aún presenta limitaciones debido a que el proyecto todavía utiliza el plugin Diff Drive de Gazebo.
-
-Esta situación será resuelta durante la integración de **ros2_control**.
+- desplazarse mediante comandos de teclado;
+- utilizar controladores estándar de `ros2_control`.
 
 ---
 
@@ -227,15 +232,13 @@ La arquitectura del proyecto evolucionará de forma incremental.
 
 ## v0.3.0
 
-Se sustituirá el plugin Diff Drive por una arquitectura basada en **ros2_control**.
-
-Se incorporarán componentes como:
+La arquitectura basada en **ros2_control** incorpora:
 
 - controller_manager
 - diff_drive_controller
 - joint_state_broadcaster
 
-Esto permitirá disponer de interfaces estándar de control para ROS 2.
+Esto proporciona interfaces estándar de control para ROS 2 y prepara el proyecto para SLAM, Nav2 y futuras variantes de hardware.
 
 ---
 

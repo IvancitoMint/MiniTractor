@@ -9,6 +9,9 @@ set -e
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 WORKSPACE="${PROJECT_ROOT}/workspace"
+COMPOSE_FILE="${PROJECT_ROOT}/docker/docker-compose.yml"
+IMAGE_NAME="minitractor:humble"
+CONTAINER_NAME="minitractor"
 
 #############################################
 # Colores
@@ -52,6 +55,36 @@ echo " MiniTractor"
 echo "=============================================="
 echo
 
+}
+
+#############################################
+# Utilidades
+#############################################
+
+confirm() {
+
+    local prompt="$1"
+    local response
+
+    read -rp "${prompt} [y/N]: " response
+
+    case "${response}" in
+        y|Y) return 0 ;;
+        *) return 1 ;;
+    esac
+
+}
+
+check_ok() {
+    printf "%-45s ${GREEN}OK${NC}\n" "$1"
+}
+
+check_fail() {
+    printf "%-45s ${RED}ERROR${NC}\n" "$1"
+}
+
+check_warn() {
+    printf "%-45s ${YELLOW}WARN${NC}\n" "$1"
 }
 
 #############################################
@@ -109,6 +142,46 @@ check_docker_context() {
 
 }
 
+check_compose_file() {
+
+    if [ ! -f "${COMPOSE_FILE}" ]; then
+
+        error "No se encontró docker-compose.yml."
+        info "Ruta esperada: ${COMPOSE_FILE}"
+
+        exit 1
+
+    fi
+
+}
+
+check_docker_image() {
+
+    if ! docker image inspect "${IMAGE_NAME}" >/dev/null 2>&1; then
+
+        warning "La imagen ${IMAGE_NAME} no existe."
+        info "Construyendo imagen Docker..."
+
+        docker_compose build
+
+    fi
+
+}
+
+check_command() {
+
+    local command_name="$1"
+    local label="${2:-$1}"
+
+    if command -v "${command_name}" >/dev/null 2>&1; then
+        check_ok "${label}"
+    else
+        check_fail "${label}"
+        return 1
+    fi
+
+}
+
 check_workspace() {
 
     if [ ! -d "${WORKSPACE}" ]; then
@@ -146,5 +219,39 @@ load_workspace() {
 
     source /opt/ros/humble/setup.bash
     source install/setup.bash
+
+}
+
+#############################################
+# Docker Compose
+#############################################
+
+docker_compose() {
+
+    USER_UID="$(id -u)" USER_GID="$(id -g)" \
+        docker compose -f "${COMPOSE_FILE}" "$@"
+
+}
+
+allow_xhost_if_available() {
+
+    if command -v xhost >/dev/null 2>&1; then
+        xhost +local: >/dev/null
+    fi
+
+}
+
+stop_project_containers() {
+
+    local containers
+
+    containers="$(docker ps --filter "name=${CONTAINER_NAME}" -q)"
+
+    if [ -z "${containers}" ]; then
+        info "No hay contenedores activos de MiniTractor."
+        return 0
+    fi
+
+    docker stop ${containers} >/dev/null
 
 }

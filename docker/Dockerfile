@@ -21,6 +21,9 @@ RUN mkdir -p /tmp/apt-archives/partial && \
         gazebo \
         ros-humble-gazebo-ros-pkgs \
         ros-humble-gazebo-plugins \
+        ros-humble-gazebo-ros2-control \
+        ros-humble-ros2-control \
+        ros-humble-ros2-controllers \
     && apt-get clean && \
     rm -rf \
         /var/lib/apt/lists/* \
