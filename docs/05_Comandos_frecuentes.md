@@ -14,25 +14,31 @@ tree -L 3
 ```
 .
 ├── docker
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   └── entrypoint.sh
 ├── docs
 │   ├── 01_Instalacion.md
 │   ├── 02_Estructura_del_proyecto.md
-│   ├── 03_Comandos_frecuentes.md
-│   ├── 04_Arquitectura.md
-│   ├── 05_ros2_control.md
-│   ├── 06_Docker.md
-│   ├── 07_SLAM_Nav2.md
-│   ├── 08_Lecciones_aprendidas.md
-│   ├── CHANGELOG.md
-│   └── CONTEXTO.md
-├── README.md
+│   ├── 03_Arquitectura.md
+│   ├── 04_Docker.md
+│   └── 05_Comandos_frecuentes.md
 ├── scripts
-│   ├── build.sh
-│   ├── clean.sh
-│   ├── doctor.sh
+│   ├── docker_build.sh
+│   ├── docker_shell.sh
+│   ├── docker_stop.sh
+│   ├── sim_run.sh
+│   ├── sim_stop.sh
+│   ├── sim_teleop_.sh
+│   ├── ws_build.sh
+│   ├── ws_clean.sh
+│   ├── ws_doctor.sh
 │   ├── lib
 │   │   └── common.sh
 │   └── run.sh
+├── .gitignore
+├── contexto.md
+├── README.md
 └── workspace
     ├── build
     │   ├── COLCON_IGNORE
