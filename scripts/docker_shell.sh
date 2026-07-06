@@ -12,6 +12,11 @@ IMAGE_NAME="minitractor:humble"
 echo "MiniTractor - Docker"
 echo
 
+# Agregar el usuario actual al grupo docker para evitar problemas de permisos 
+sudo usermod -aG docker $USER
+newgrp docker
+
+
 if command -v xhost >/dev/null 2>&1; then
     xhost +local: >/dev/null
 fi
