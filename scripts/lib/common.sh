@@ -70,6 +70,45 @@ check_ros() {
 
 }
 
+check_docker() {
+
+    if ! command -v docker >/dev/null 2>&1; then
+
+        error "Docker no está instalado."
+
+        exit 1
+
+    fi
+
+    if ! docker info >/dev/null 2>&1; then
+
+        error "No se pudo conectar con Docker."
+
+        info "Si acabas de iniciar sesión ejecuta:"
+        echo
+        echo "    newgrp docker"
+        echo
+
+        exit 1
+
+    fi
+
+}
+
+check_docker_context() {
+
+    CURRENT_CONTEXT="$(docker context show)"
+
+    if [ "${CURRENT_CONTEXT}" != "default" ]; then
+
+        warning "Cambiando Docker Context a 'default'..."
+
+        docker context use default >/dev/null
+
+    fi
+
+}
+
 check_workspace() {
 
     if [ ! -d "${WORKSPACE}" ]; then
@@ -89,7 +128,7 @@ check_install() {
         error "Workspace no compilado."
 
         info "Ejecuta primero:"
-        echo "./scripts/build.sh"
+        echo "./scripts/ws_build.sh"
 
         exit 1
 
@@ -103,7 +142,9 @@ check_install() {
 
 load_workspace() {
 
+    cd "${WORKSPACE}"
+
     source /opt/ros/humble/setup.bash
-    source "${WORKSPACE}/install/setup.bash"
+    source install/setup.bash
 
 }

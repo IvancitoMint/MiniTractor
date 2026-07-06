@@ -1,0 +1,31 @@
+services:
+  minitractor:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        USER_UID: ${USER_UID:-1000}
+        USER_GID: ${USER_GID:-1000}
+
+    image: minitractor:humble
+    container_name: minitractor_ros
+
+    network_mode: host
+    ipc: host
+    privileged: true
+
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - LIBGL_ALWAYS_SOFTWARE=0
+      - ROS_DOMAIN_ID=0
+
+    volumes:
+      - ..:/home/ros/MiniTractor
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev/dri:/dev/dri
+
+    stdin_open: true
+    tty: true
+
+    command: bash
