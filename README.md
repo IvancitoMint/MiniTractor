@@ -10,6 +10,7 @@ MiniTractor es un proyecto de robótica móvil cuyo objetivo es desarrollar una 
 
 Actualmente el proyecto incluye:
 
+- Docker
 - Modelo del tractor en URDF/Xacro
 - Simulación en Gazebo Classic
 - Cámara RGB
@@ -19,7 +20,6 @@ Actualmente el proyecto incluye:
 
 En futuras versiones se integrarán:
 
-- Docker
 - ros2_control
 - RViz2
 - SLAM
@@ -52,7 +52,6 @@ En futuras versiones se integrarán:
 
 Próximamente:
 
-- Docker
 - ros2_control
 
 ---
@@ -76,17 +75,17 @@ tractor_project/
 
 - [x] Organización del proyecto
 - [x] Documentación inicial
-- [ ] Scripts
-- [ ] Git
+- [x] Scripts
+- [x] Git
 
 ## Fase 1 — Simulación
 
-- [ ] Restauración del proyecto
-- [ ] Validación completa
+- [x] Restauración del proyecto
+- [x] Validación completa
 
 ## Fase 2
 
-- [ ] Docker
+- [x] Docker
 
 ## Fase 3
 
@@ -127,7 +126,8 @@ Pendiente.
 ---
 
 # Autores
-Guillermo Delgado Farias
-Ivan Alejandro Gonzalez Ochoa
-Christian David Sanchez Sanchez
-Fernando Nicolás Sanchez Montes de Oca
+
+- Guillermo Delgado Farias
+- Ivan Alejandro Gonzalez Ochoa
+- Christian David Sanchez Sanchez
+- Fernando Nicolás Sanchez Montes de Oca
