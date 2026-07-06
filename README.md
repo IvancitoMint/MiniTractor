@@ -19,11 +19,13 @@ Actualmente el proyecto incluye:
 - Control mediante `ros2_control`
 - `diff_drive_controller`
 - `joint_state_broadcaster`
+- SLAM Toolbox
+- Guardado de mapas con `nav2_map_server`
+- Obstáculos dinámicos en Gazebo
 
 En futuras versiones se integrarán:
 
 - RViz2
-- SLAM
 - Nav2
 - Navegación autónoma
 - Visión artificial
@@ -51,6 +53,8 @@ En futuras versiones se integrarán:
 - CMake
 - ros2_control
 - ros2_controllers
+- SLAM Toolbox
+- Navigation2 Map Server
 - Git
 
 ---
@@ -92,15 +96,15 @@ MiniTractor/
 
 ## Fase 4
 
-- [ ] RViz2
+- [x] SLAM
 
 ## Fase 5
 
-- [ ] SLAM
+- [ ] Nav2
 
 ## Fase 6
 
-- [ ] Nav2
+- [ ] RViz2
 
 ## Fase 7
 

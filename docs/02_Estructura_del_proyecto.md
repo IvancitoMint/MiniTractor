@@ -101,6 +101,10 @@ scripts/
 ├── sim_run.sh
 ├── sim_stop.sh
 ├── sim_teleop.sh
+├── slam_run.sh
+├── slam_save_map.sh
+├── obstacle_add.sh
+├── obstacle_remove.sh
 │
 ├── ws_build.sh
 ├── ws_clean.sh
@@ -135,6 +139,28 @@ Permiten ejecutar la simulación del tractor.
 | sim_run.sh | Inicia Gazebo y todos los nodos del proyecto. |
 | sim_stop.sh | Detiene procesos locales de simulación sin administrar Docker. |
 | sim_teleop.sh | Controla el tractor mediante teclado. |
+
+---
+
+## Scripts de SLAM
+
+Permiten ejecutar el flujo de mapeo con SLAM Toolbox.
+
+| Script | Función |
+|---------|---------|
+| slam_run.sh | Inicia la simulación con Safety Stop y SLAM Toolbox activo. |
+| slam_save_map.sh | Guarda el mapa generado en `workspace/maps/`. |
+
+---
+
+## Scripts de Obstáculos
+
+Permiten agregar o quitar obstáculos temporales durante la simulación.
+
+| Script | Función |
+|---------|---------|
+| obstacle_add.sh | Inserta la caja roja de prueba en Gazebo. |
+| obstacle_remove.sh | Elimina la caja roja de prueba de Gazebo. |
 
 ---
 
@@ -175,6 +201,7 @@ Contiene el workspace de ROS 2.
 workspace/
 │
 ├── src/
+├── maps/
 ├── build/
 ├── install/
 └── log/
@@ -198,6 +225,14 @@ src/
 
 ---
 
+## maps/
+
+Contiene los mapas generados durante las sesiones de SLAM.
+
+Esta carpeta mantiene únicamente un archivo `.gitkeep` en Git. Los mapas `*.pgm` y `*.yaml` generados localmente se ignoran para evitar incluir artefactos temporales en el repositorio.
+
+---
+
 ### tractor_bringup
 
 Coordina el inicio completo del sistema.
@@ -206,6 +241,7 @@ Se encarga de:
 
 - iniciar Gazebo
 - cargar el mundo virtual
+- instalar modelos dinámicos de simulación
 - publicar el modelo del robot
 - generar la entidad en la simulación
 - iniciar los nodos necesarios para la simulación

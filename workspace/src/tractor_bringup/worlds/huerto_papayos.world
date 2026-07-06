@@ -492,33 +492,5 @@
       </link>
     </model>
 
-    <!-- =========================================================
-         Obstáculo para probar frenado automático
-         ========================================================= -->
-    <model name="caja_obstaculo">
-      <static>true</static>
-      <pose>7.0 0 0.35 0 0 0</pose>
-      <link name="link">
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.8 0.8 0.7</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.75 0.15 0.15 1</ambient>
-            <diffuse>0.75 0.15 0.15 1</diffuse>
-          </material>
-        </visual>
-        <collision name="collision">
-          <geometry>
-            <box>
-              <size>0.8 0.8 0.7</size>
-            </box>
-          </geometry>
-        </collision>
-      </link>
-    </model>
-
   </world>
 </sdf>

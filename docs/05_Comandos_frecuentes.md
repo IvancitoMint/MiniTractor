@@ -128,6 +128,90 @@ ros2 launch tractor_description display.launch.py
 
 ---
 
+# SLAM
+
+Iniciar la simulación con SLAM Toolbox:
+
+```bash
+./scripts/slam_run.sh
+```
+
+Lanzamiento manual equivalente:
+
+```bash
+cd ~/MiniTractor/workspace
+source /opt/ros/humble/setup.bash
+source install/setup.bash
+ros2 launch tractor_bringup sim_with_slam.launch.py
+```
+
+Durante el mapeo, teleopera el tractor por todo el entorno virtual en Gazebo:
+
+```bash
+./scripts/sim_teleop.sh
+```
+
+Guardar el mapa con el nombre recomendado:
+
+```bash
+./scripts/slam_save_map.sh
+```
+
+Guardar el mapa con un nombre personalizado:
+
+```bash
+./scripts/slam_save_map.sh huerto_map
+```
+
+Comando manual equivalente:
+
+```bash
+ros2 run nav2_map_server map_saver_cli -f ~/MiniTractor/workspace/maps/huerto_map
+```
+
+El guardado genera:
+
+- `workspace/maps/huerto_map.pgm`;
+- `workspace/maps/huerto_map.yaml`.
+
+Los mapas generados se ignoran en Git para evitar versionar salidas temporales.
+
+---
+
+# Obstáculos dinámicos
+
+Agregar la caja roja de prueba en el pasillo:
+
+```bash
+./scripts/obstacle_add.sh
+```
+
+Quitar la caja roja:
+
+```bash
+./scripts/obstacle_remove.sh
+```
+
+Agregarla en otra posición:
+
+```bash
+OBSTACLE_X=5.0 OBSTACLE_Y=0.5 ./scripts/obstacle_add.sh
+```
+
+Nombre y posición por defecto:
+
+```text
+OBSTACLE_NAME=caja_obstaculo
+OBSTACLE_X=7.0
+OBSTACLE_Y=0.0
+OBSTACLE_Z=0.35
+OBSTACLE_YAW=0.0
+```
+
+Para mapeo con SLAM se recomienda generar el mapa sin este obstáculo, y agregarlo después para probar Safety Stop o futuros comportamientos de navegación.
+
+---
+
 # Teleoperación
 
 En una segunda terminal, entrar al contenedor y ejecutar:

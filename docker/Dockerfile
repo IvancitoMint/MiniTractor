@@ -24,6 +24,8 @@ RUN mkdir -p /tmp/apt-archives/partial && \
         ros-humble-gazebo-ros2-control \
         ros-humble-ros2-control \
         ros-humble-ros2-controllers \
+        ros-humble-slam-toolbox \
+        ros-humble-nav2-map-server \
     && apt-get clean && \
     rm -rf \
         /var/lib/apt/lists/* \

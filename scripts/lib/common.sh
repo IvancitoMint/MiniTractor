@@ -9,6 +9,9 @@ set -e
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 WORKSPACE="${PROJECT_ROOT}/workspace"
+MAPS_DIR="${WORKSPACE}/maps"
+DEFAULT_MAP_NAME="huerto_map"
+DEFAULT_OBSTACLE_NAME="caja_obstaculo"
 COMPOSE_FILE="${PROJECT_ROOT}/docker/docker-compose.yml"
 IMAGE_NAME="minitractor:humble"
 CONTAINER_NAME="minitractor"
@@ -206,6 +209,12 @@ check_install() {
         exit 1
 
     fi
+
+}
+
+ensure_maps_dir() {
+
+    mkdir -p "${MAPS_DIR}"
 
 }
 

@@ -127,6 +127,90 @@ El tópico `/cmd_vel` queda reservado como salida filtrada del nodo Safety Stop 
 
 ---
 
+# SLAM
+
+La integración de SLAM Toolbox utiliza los datos ya publicados por la simulación:
+
+- `/scan`;
+- `/odom`;
+- `/tf`;
+- `/tf_static`.
+
+El flujo de mapeo es:
+
+```text
+Gazebo / Tractor
+        │
+        ├── /scan
+        ├── /odom
+        └── TF
+             │
+             ▼
+      slam_toolbox
+             │
+             ▼
+           /map
+```
+
+`slam_toolbox` publica la transformación `map -> odom`, mientras que `diff_drive_controller` mantiene la odometría y el resto de la cadena TF del tractor.
+
+El launch dedicado para esta integración es:
+
+```bash
+ros2 launch tractor_bringup sim_with_slam.launch.py
+```
+
+El script equivalente del proyecto es:
+
+```bash
+./scripts/slam_run.sh
+```
+
+Para generar mapas persistentes del huerto, el mundo base no incluye obstáculos temporales en medio del pasillo. Los obstáculos de prueba se agregan dinámicamente durante la simulación.
+
+---
+
+# Obstáculos dinámicos
+
+La caja roja de prueba no forma parte fija del mundo `huerto_papayos.world`.
+
+Se gestiona como un modelo dinámico de Gazebo desde:
+
+```text
+tractor_bringup/models/caja_obstaculo/model.sdf
+```
+
+Esto permite usar el mismo entorno para dos casos:
+
+- mapeo limpio con SLAM;
+- pruebas de Safety Stop con un obstáculo temporal.
+
+Agregar la caja:
+
+```bash
+./scripts/obstacle_add.sh
+```
+
+Quitar la caja:
+
+```bash
+./scripts/obstacle_remove.sh
+```
+
+Por defecto se inserta en el centro del pasillo:
+
+```text
+x=7.0, y=0.0, z=0.35
+```
+
+También puede moverse usando variables de entorno:
+
+```bash
+OBSTACLE_X=5.0 OBSTACLE_Y=0.5 ./scripts/obstacle_add.sh
+```
+
+---
+
 # Sensores
 
 Actualmente el tractor incorpora los siguientes sensores virtuales.
@@ -244,7 +328,7 @@ Esto proporciona interfaces estándar de control para ROS 2 y prepara el proyect
 
 ## v0.4.0
 
-Se integrará **SLAM Toolbox**.
+Integra **SLAM Toolbox**.
 
 El flujo de información incorporará:
 

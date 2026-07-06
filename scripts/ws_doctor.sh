@@ -51,6 +51,8 @@ PACKAGES=(
     controller_manager
     diff_drive_controller
     joint_state_broadcaster
+    slam_toolbox
+    nav2_map_server
 )
 
 for PKG in "${PACKAGES[@]}"; do
