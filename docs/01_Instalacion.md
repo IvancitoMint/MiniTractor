@@ -93,7 +93,7 @@ docker run hello-world
 
 # 3. Configurar Docker (solo Linux)
 
-Agregar el usuario al grupo docker:
+**Agregar el usuario al grupo docker**
 
 ```bash
 sudo usermod -aG docker $USER
@@ -105,12 +105,19 @@ Aplicar el cambio:
 newgrp docker
 ```
 
+Para actualizar los grupos será necesario reiniciar el dispositivo. Con el siguiente comando lo hará:
+```bash
+sudo reboot
+```
+
 Confirmar que el usuario pertenece al grupo docker
 ```bash
 groups
 ```
 
-Seleccionar el contexto default
+> **Nota:** Configurar el grupo docker es un paso que se realiza una única vez. No es necesario repetirlo.
+
+**Seleccionar el contexto default**
 
 ```bash
 docker context use default
@@ -128,7 +135,12 @@ NAME              DESCRIPTION                               DOCKER ENDPOINT
 default *         Current DOCKER_HOST based configuration   unix:///var/run/docker.sock
 ```
 
-Permitir aplicaciones gráficas (X11)
+> **Nota:** Este comando cambia el contexto activo de Docker. Docker recuerda ese contexto, así que no necesitas volver a ejecutarlo salvo que:
+- instales Docker Desktop;
+- cambies manualmente al contexto desktop-linux;
+- crees otros contextos.
+
+**Permitir aplicaciones gráficas (X11)**
 ```bash
 xhost +local:
 ```
@@ -143,8 +155,9 @@ Verificar:
 ```bash
 docker run hello-world
 ```
+> **Nota:** Este comando modifica los permisos del servidor X de la sesión gráfica actual, no es una configuración permanente. si cierras sesión gráfica o reinicias el equipo, normalmente tendrás que volver a ejecutarlo
 
-> **Nota:** En Windows y macOS este paso no es necesario, ya que Docker Desktop gestiona automáticamente los permisos.
+> **Nota:** En Windows y macOS estos pasos no son necesarios, ya que Docker Desktop gestiona automáticamente los permisos.
 
 ---
 
@@ -160,11 +173,10 @@ cd MiniTractor
 
 # 5. Construir la imagen Docker
 
-### Linux
+### Linux, macOs y Windows + WSL2
 
 ```bash
-USER_UID=$(id -u) USER_GID=$(id -g) \
-docker compose -f docker/docker-compose.yml build
+./scripts/docker_build.sh
 ```
 
 ### Windows (PowerShell)
@@ -173,23 +185,17 @@ docker compose -f docker/docker-compose.yml build
 docker compose -f docker/docker-compose.yml build
 ```
 
-### macOS
-
-```bash
-docker compose -f docker/docker-compose.yml build
-```
-
 ---
 
 # 6. Iniciar el contenedor
 
-Linux y macOS:
+### Linux y macOS:
 
 ```bash
 ./scripts/docker_shell.sh
 ```
 
-Windows:
+### Windows:
 
 ```powershell
 bash scripts/docker_shell.sh
@@ -207,6 +213,17 @@ bash scripts/docker_shell.sh
 
 # 8. Ejecutar la simulación
 
+```bash
+./scripts/sim_run.sh
+```
+
+Al ejecutar la simulación por primera vez es muy probable que el ángulo de la cámara no sea el adecuado.
+Esto se soluciona deteniendo la simulación presionando:
+```bash
+ctrl + c
+```
+
+Luego ejecutamos la simulación por segunda y ahora el ángulo de la cámara debería ser el corrcto.
 ```bash
 ./scripts/sim_run.sh
 ```
